@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Ảnh lên Cloudinary</title>
+</head>
+<body>
+    <h2>Upload Ảnh</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <hr>
+
+    <h3>📸 Danh sách ảnh đã upload:</h3>
+    <div style="display: flex; flex-wrap: wrap;">
+        {% for img in gallery %}
+        <div style="margin: 10px;">
+            <img src="{{ img }}" alt="Uploaded Image" width="200" style="border: 1px solid #ccc;">
+            <p><a href="{{ img }}" target="_blank">Xem ảnh</a></p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
