@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cloudinary Image Gallery</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand d-flex align-items-center fw-bold" href="#">
                 <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="30" class="d-inline-block align-top me-2">
-                Cloud Gallery
+                <span class="gradient-text">Cloud Gallery</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -21,7 +22,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-house-door me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-info-circle me-1"></i> About
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -29,71 +37,89 @@
     </nav>
 
     <div class="container py-3">
-        <div class="upload-container shadow-sm p-4 mb-5 bg-white rounded">
-            <h2 class="text-center mb-4">📤 Upload Ảnh lên Cloudinary</h2>
+        <div class="upload-container shadow p-4 mb-5 bg-white rounded">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="bi bi-cloud-arrow-up-fill me-2"></i>Upload Ảnh lên Cloudinary
+            </h2>
             
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}
-                    <div class="alert alert-info alert-dismissible fade show">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <div class="alert alert-info alert-dismissible fade show d-flex align-items-center">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <div>{{ message }}</div>
+                        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
                     </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
             
             {% if error_message %}
-            <div class="alert alert-danger alert-dismissible fade show">
-                {{ error_message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <div>{{ error_message }}</div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
             </div>
             {% endif %}
 
             <form method="POST" enctype="multipart/form-data" class="text-center">
-                <div class="mb-3">
-                    <label for="fileInput" class="form-label">Chọn ảnh để upload (JPEG, PNG)</label>
-                    <input class="form-control" type="file" id="fileInput" name="file" accept="image/jpeg, image/png" required>
-                    <div class="form-text">Tối đa 5MB. Ảnh sẽ được tự động resize</div>
+                <div class="mb-4">
+                    <div class="file-upload-area p-4 border-2 border-dashed rounded-3 bg-light mb-3">
+                        <i class="bi bi-images fs-1 text-muted mb-3"></i>
+                        <label for="fileInput" class="form-label d-block fw-bold">Chọn ảnh để upload</label>
+                        <input class="form-control d-none" type="file" id="fileInput" name="file" accept="image/jpeg, image/png" required>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('fileInput').click()">
+                            <i class="bi bi-folder2-open me-1"></i> Browse Files
+                        </button>
+                        <div class="form-text mt-2">JPEG, PNG (Tối đa 5MB)</div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary px-4">
-                    <i class="bi bi-cloud-upload"></i> Upload
+                <button type="submit" class="btn btn-primary px-4 py-2 fw-bold">
+                    <i class="bi bi-cloud-upload me-2"></i> Upload Image
                 </button>
             </form>
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3>📸 Gallery</h3>
-            <span class="badge bg-secondary">{{ gallery|length }} ảnh</span>
+        <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+            <h3 class="mb-0 text-secondary">
+                <i class="bi bi-collection me-2"></i>Image Gallery
+            </h3>
+            <span class="badge bg-primary rounded-pill px-3 py-2">{{ gallery|length }} ảnh</span>
         </div>
         
         {% if not gallery %}
-        <div class="alert alert-info text-center">
-            Chưa có ảnh nào được upload. Hãy upload ảnh đầu tiên của bạn!
+        <div class="alert alert-info text-center py-3">
+            <i class="bi bi-image me-2"></i>Chưa có ảnh nào được upload. Hãy upload ảnh đầu tiên của bạn!
         </div>
         {% else %}
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             {% for img in gallery %}
             <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ img }}" class="card-img-top gallery-img" alt="Uploaded image" loading="lazy">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="position-relative overflow-hidden rounded-top">
+                        <img src="{{ img }}" class="card-img-top gallery-img" alt="Uploaded image" loading="lazy">
+                        <div class="image-overlay"></div>
+                    </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <a href="{{ img }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-eye"></i> Xem ảnh
+                        <div class="d-flex justify-content-between gap-2">
+                            <a href="{{ img }}" target="_blank" class="btn btn-sm btn-outline-primary flex-grow-1">
+                                <i class="bi bi-eye-fill me-1"></i> View
                             </a>
                             <form method="POST" action="{{ url_for('delete_image') }}" 
                                   onsubmit="return confirm('Bạn chắc chắn muốn xóa ảnh này?')">
                                 <input type="hidden" name="image_url" value="{{ img }}">
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash"></i> Xóa
+                                <button type="submit" class="btn btn-sm btn-danger flex-grow-1">
+                                    <i class="bi bi-trash-fill me-1"></i> Delete
                                 </button>
                             </form>
                         </div>
                     </div>
-                    <div class="card-footer bg-transparent">
-                        <small class="text-muted">
-                            <a href="{{ img }}" target="_blank" class="text-decoration-none">Copy link</a>
+                    <div class="card-footer bg-transparent border-top-0 pt-0">
+                        <small class="text-muted d-flex justify-content-between align-items-center">
+                            <span>Image {{ loop.index }}</span>
+                            <a href="{{ img }}" target="_blank" class="text-decoration-none" title="Copy link">
+                                <i class="bi bi-link-45deg"></i>
+                            </a>
                         </small>
                     </div>
                 </div>
@@ -105,15 +131,26 @@
 
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container text-center">
-            <p class="mb-0">© 2023 Cloud Gallery | Flask + Cloudinary</p>
+            <p class="mb-0">
+                <i class="bi bi-cloud-fill me-1"></i>© 2023 Cloud Gallery | Flask + Cloudinary
+            </p>
         </div>
     </footer>
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Update file input display
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const fileUploadArea = document.querySelector('.file-upload-area');
+            if (this.files.length > 0) {
+                fileUploadArea.innerHTML = `
+                    <i class="bi bi-file-image fs-1 text-primary mb-2"></i>
+                    <div class="fw-bold">${this.files[0].name}</div>
+                    <small class="text-muted">${(this.files[0].size / 1024 / 1024).toFixed(2)} MB</small>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>

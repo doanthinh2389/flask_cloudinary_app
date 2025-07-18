@@ -1,32 +1,106 @@
-/* Custom styles */
+:root {
+    --primary: #0d6efd;
+    --primary-light: #3d8bfd;
+    --primary-dark: #0b5ed7;
+    --secondary: #6c757d;
+    --accent: #ffc107;
+    --danger: #dc3545;
+}
+
+/* Base styles */
 body {
     padding-top: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Gradient text for brand */
+.gradient-text {
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Upload container */
 .upload-container {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    padding: 2.5rem;
     margin-bottom: 2rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: none;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+.file-upload-area {
+    border: 2px dashed var(--secondary);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.file-upload-area:hover {
+    border-color: var(--primary);
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Gallery styles */
 .gallery-img {
     transition: transform 0.3s ease;
     height: 200px;
     object-fit: cover;
+    width: 100%;
 }
 
-.gallery-img:hover {
-    transform: scale(1.03);
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.3), transparent 30%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover .image-overlay {
+    opacity: 1;
+}
+
+.card:hover .gallery-img {
+    transform: scale(1.05);
 }
 
 .card {
-    transition: box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    border-radius: 10px !important;
+    overflow: hidden;
 }
 
 .card:hover {
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    border-color: var(--danger);
 }
 
 /* Responsive adjustments */
@@ -37,5 +111,20 @@ body {
     
     .gallery-img {
         height: 150px;
+    }
+    
+    .file-upload-area {
+        padding: 2rem 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .upload-container {
+        padding: 1.25rem;
+    }
+    
+    .card-body .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
     }
 }
