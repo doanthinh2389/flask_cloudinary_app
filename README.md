@@ -66,6 +66,7 @@ pip install -r requirements.txt
 CLOUD_NAME=your_cloud_name
 API_KEY=your_api_key
 API_SECRET=your_api_secret
+SECRET_KEY= import os -> print("SECRET_KEY=" + os.urandom(24).hex()) -> .env
 
 # Run the app
 python app.py
@@ -90,7 +91,7 @@ App is always online at:
 
 🧠 Author
 👤 Đoàn Quốc Thịnh
-📧 Email: doanquoc@example.com
+📧 Email: doanquocthinh2389@gmail.com
 🔗 GitHub: doanthinh2389
 
 🧾 What I Learned
