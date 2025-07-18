@@ -71,6 +71,13 @@ def index():
             return redirect(request.url)
             
         file = request.files['file']
+        file.seek(0, os.SEEK_END)
+        file_size = file.tell()
+        file.seek(0)
+        
+        if file_size > 5 * 1024 * 1024:  # 5MB
+            flash('File quá lớn (tối đa 5MB)', 'error')
+            return redirect(request.url)
         
         if file.filename == '':
             flash('Không có file được chọn', 'error')
