@@ -1,0 +1,41 @@
+/* Custom styles */
+body {
+    padding-top: 0;
+}
+
+.upload-container {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.gallery-img {
+    transition: transform 0.3s ease;
+    height: 200px;
+    object-fit: cover;
+}
+
+.gallery-img:hover {
+    transform: scale(1.03);
+}
+
+.card {
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .upload-container {
+        padding: 1.5rem;
+    }
+    
+    .gallery-img {
+        height: 150px;
+    }
+}

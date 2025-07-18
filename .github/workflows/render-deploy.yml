@@ -22,9 +22,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest  # Nếu bạn muốn thêm testing sau này
+        pip install pytest
         
     - name: Run tests (optional)
       run: |
-        # Thêm lệnh test nếu bạn có
         echo "No tests yet"
+
+    - name: 🔁 Trigger Deploy on Render
+      run: |
+        curl -X POST https://api.render.com/deploy/srv-d1sk7gi4d50c739fmsb0?key=d1FclidOjj0

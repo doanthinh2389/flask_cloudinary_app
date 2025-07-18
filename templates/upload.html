@@ -1,26 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload Ảnh lên Cloudinary</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloudinary Image Gallery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 </head>
-<body>
-    <h2>Upload Ảnh</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*" required>
-        <button type="submit">Upload</button>
-    </form>
-
-    <hr>
-
-    <h3>📸 Danh sách ảnh đã upload:</h3>
-    <div style="display: flex; flex-wrap: wrap;">
-        {% for img in gallery %}
-        <div style="margin: 10px;">
-            <img src="{{ img }}" alt="Uploaded Image" width="200" style="border: 1px solid #ccc;">
-            <p><a href="{{ img }}" target="_blank">Xem ảnh</a></p>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="30" class="d-inline-block align-top me-2">
+                Cloud Gallery
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        {% endfor %}
+    </nav>
+
+    <div class="container py-3">
+        <div class="upload-container shadow-sm p-4 mb-5 bg-white rounded">
+            <h2 class="text-center mb-4">📤 Upload Ảnh lên Cloudinary</h2>
+            
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            {% if error_message %}
+            <div class="alert alert-danger alert-dismissible fade show">
+                {{ error_message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data" class="text-center">
+                <div class="mb-3">
+                    <label for="fileInput" class="form-label">Chọn ảnh để upload (JPEG, PNG)</label>
+                    <input class="form-control" type="file" id="fileInput" name="file" accept="image/jpeg, image/png" required>
+                    <div class="form-text">Tối đa 5MB. Ảnh sẽ được tự động resize</div>
+                </div>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="bi bi-cloud-upload"></i> Upload
+                </button>
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>📸 Gallery</h3>
+            <span class="badge bg-secondary">{{ gallery|length }} ảnh</span>
+        </div>
+        
+        {% if not gallery %}
+        <div class="alert alert-info text-center">
+            Chưa có ảnh nào được upload. Hãy upload ảnh đầu tiên của bạn!
+        </div>
+        {% else %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for img in gallery %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ img }}" class="card-img-top gallery-img" alt="Uploaded image" loading="lazy">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ img }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i> Xem ảnh
+                            </a>
+                            <form method="POST" action="{{ url_for('delete_image') }}" 
+                                  onsubmit="return confirm('Bạn chắc chắn muốn xóa ảnh này?')">
+                                <input type="hidden" name="image_url" value="{{ img }}">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Xóa
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">
+                            <a href="{{ img }}" target="_blank" class="text-decoration-none">Copy link</a>
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">© 2023 Cloud Gallery | Flask + Cloudinary</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
